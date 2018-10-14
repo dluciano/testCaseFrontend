@@ -7,6 +7,8 @@ import { AppState } from '../app.service';
 import { Title } from './title';
 import { XLargeDirective } from './x-large';
 
+import { OAuthService } from 'angular-oauth2-oidc';
+
 @Component({
   /**
    * The selector is what angular internally uses
@@ -23,7 +25,7 @@ import { XLargeDirective } from './x-large';
   /**
    * Our list of styles in our component. We may add more to compose many styles together.
    */
-  styleUrls: [ './home.component.css' ],
+  styleUrls: ['./home.component.css'],
   /**
    * Every Angular template is first compiled by the browser before Angular runs it's compiler.
    */
@@ -39,8 +41,9 @@ export class HomeComponent implements OnInit {
    */
   constructor(
     public appState: AppState,
-    public title: Title
-  ) {}
+    public title: Title,
+    private oauthService: OAuthService
+  ) { }
 
   public ngOnInit() {
     console.log('hello `Home` component');
@@ -53,5 +56,20 @@ export class HomeComponent implements OnInit {
     console.log('submitState', value);
     this.appState.set('value', value);
     this.localState.value = '';
+  }
+  public login() {
+    this.oauthService.initImplicitFlow();
+  }
+
+  public logoff() {
+    this.oauthService.logOut();
+  }
+
+  public get name() {
+    const claims = this.oauthService.getIdentityClaims();
+    if (!claims) {
+      return null;
+    }
+    return claims.given_name;
   }
 }

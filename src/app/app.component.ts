@@ -4,6 +4,9 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { environment } from 'environments/environment';
 import { AppState } from './app.service';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { JwksValidationHandler } from 'angular-oauth2-oidc';
+import { authConfig } from './auth.config';
 
 export const ROOT_SELECTOR = 'app';
 
@@ -69,13 +72,21 @@ export class AppComponent implements OnInit {
   public showDevModule: boolean = environment.showDevModule;
 
   constructor(
-    public appState: AppState
-  ) {}
+    public appState: AppState,
+    private oauthService: OAuthService,
+  ) {
+    this.configureWithNewConfigApi();
+  }
 
   public ngOnInit() {
     console.log('Initial App State', this.appState.state);
   }
 
+  private configureWithNewConfigApi() {
+    this.oauthService.configure(authConfig);
+    this.oauthService.tokenValidationHandler = new JwksValidationHandler();
+    this.oauthService.loadDiscoveryDocumentAndTryLogin();
+  }
 }
 
 /**
