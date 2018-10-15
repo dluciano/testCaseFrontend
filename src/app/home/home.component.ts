@@ -8,6 +8,7 @@ import { Title } from './title';
 import { XLargeDirective } from './x-large';
 
 import { OAuthService } from 'angular-oauth2-oidc';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   /**
@@ -36,13 +37,15 @@ export class HomeComponent implements OnInit {
    * Set our default values
    */
   public localState = { value: '' };
+  public items = [];
   /**
    * TypeScript public modifiers
    */
   constructor(
     public appState: AppState,
     public title: Title,
-    private oauthService: OAuthService
+    private oauthService: OAuthService,
+    private http: HttpClient
   ) { }
 
   public ngOnInit() {
@@ -71,5 +74,12 @@ export class HomeComponent implements OnInit {
       return null;
     }
     return claims.given_name;
+  }
+
+  public getValues() {
+    this.http.get('https://localhost:5001/api/values')
+      .subscribe((data: any) => {
+        this.items = data;
+      });
   }
 }

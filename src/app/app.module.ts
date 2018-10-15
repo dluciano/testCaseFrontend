@@ -59,7 +59,12 @@ interface StoreType {
       preloadingStrategy: PreloadAllModules
     }),
     HttpClientModule,
-    OAuthModule.forRoot(),
+    OAuthModule.forRoot({
+      resourceServer: {
+          allowedUrls: ['https://localhost:5001/api/values'],
+          sendAccessToken: true
+      }
+  }),
     /**
      * This section will import the `DevModuleModule` only in certain build types.
      * When the module is not imported it will get tree shaked.

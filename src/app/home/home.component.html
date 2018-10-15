@@ -10,11 +10,18 @@
     Hallo, {{name}}
   </h1>
 
+  <ul *ngFor="let item of items">
+    <li>{{item}}</li>
+  </ul>
+
   <button class="btn btn-default" (click)="login()">
     Login
   </button>
   <button class="btn btn-default" (click)="logoff()">
     Logout
+  </button>
+  <button class="btn btn-default" (click)="getValues()">
+    Get Values
   </button>
 
   <div>
